@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
-import { getAppRecommendations } from '../services/geminiService';
-import { RecommendationResponse, AppInfo } from '../types';
-import { MOCK_APPS } from '../constants';
+import { getAppRecommendations } from '../services/geminiService.ts';
+import { RecommendationResponse, AppInfo } from '../types.ts';
+import { MOCK_APPS } from '../constants.ts';
 
 interface AIAdvisorProps {
   onSuggest: (apps: AppInfo[]) => void;

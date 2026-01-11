@@ -1,5 +1,5 @@
 
-import { AppInfo, AppCategory } from './types';
+import { AppInfo, AppCategory } from './types.ts';
 
 export const MOCK_APPS: AppInfo[] = [
   // Games
@@ -29,7 +29,6 @@ export const MOCK_APPS: AppInfo[] = [
     price: 'Free',
     appStoreUrl: 'https://apps.apple.com/th/app/garena-rov-5v5-festival/id1150337432'
   },
-  // Productivity & AI
   {
     id: 'gemini',
     name: 'Google Gemini',
@@ -69,7 +68,6 @@ export const MOCK_APPS: AppInfo[] = [
     price: 'Free',
     appStoreUrl: 'https://apps.apple.com/th/app/roblox/id431946152'
   },
-  // SNS
   {
     id: 'tiktok',
     name: 'TikTok',
@@ -109,7 +107,6 @@ export const MOCK_APPS: AppInfo[] = [
     price: 'Free',
     appStoreUrl: 'https://apps.apple.com/th/app/instagram/id389801252'
   },
-  // Utility
   {
     id: 'meitu',
     name: 'Meitu',

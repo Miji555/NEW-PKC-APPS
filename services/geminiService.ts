@@ -1,7 +1,7 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
-import { MOCK_APPS } from "../constants";
-import { RecommendationResponse } from "../types";
+import { MOCK_APPS } from "../constants.ts";
+import { RecommendationResponse } from "../types.ts";
 
 export const getAppRecommendations = async (userQuery: string): Promise<RecommendationResponse> => {
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });

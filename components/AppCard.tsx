@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { AppInfo } from '../types';
+import { AppInfo } from '../types.ts';
 
 interface AppCardProps {
   app: AppInfo;
