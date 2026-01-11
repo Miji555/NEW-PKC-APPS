@@ -100,12 +100,15 @@
     }
 
     .smart-banner-ui {
-        background: rgba(255, 255, 255, 0.7);
-        backdrop-filter: blur(20px) saturate(180%);
-        -webkit-backdrop-filter: blur(20px) saturate(180%);
-        border-bottom: 1px solid rgba(0,0,0,0.1);
-        height: 72px;
-        z-index: 100;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(30px) saturate(200%);
+        -webkit-backdrop-filter: blur(30px) saturate(200%);
+        border-bottom: 1px solid rgba(0,0,0,0.08);
+        height: 76px;
+        z-index: 1000;
+        position: sticky;
+        top: 0;
+        width: 100%;
     }
 
     .app-card-shadow {
@@ -134,11 +137,12 @@
         object-fit: cover;
     }
 
-    .warning-box {
-        background: rgba(0, 122, 255, 0.1);
-        border: 1px solid rgba(0, 122, 255, 0.3);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
+    .guideline-box {
+        background: rgba(0, 122, 255, 0.08);
+        border: 1px solid rgba(0, 122, 255, 0.2);
+        backdrop-filter: blur(15px);
+        border-radius: 24px;
+        box-shadow: 0 4px 24px rgba(0, 122, 255, 0.05);
     }
 
     @media (max-width: 1024px) {
@@ -249,23 +253,27 @@
     const SmartBanner = ({ app, onClose }) => {
         if (!app) return null;
         return (
-            <div className="smart-banner-ui sticky top-0 left-0 w-full flex items-center px-4 animate-in">
-                <button onClick={onClose} className="p-2 text-blue-500 mr-2">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
-                </button>
-                <img src={app.icon} className="w-10 h-10 app-icon shadow-sm mr-3" />
-                <div className="flex-grow min-w-0">
-                    <h4 className="font-bold text-sm text-gray-900 truncate leading-tight">{app.name}</h4>
-                    <p className="text-[11px] text-gray-500 truncate">{app.subtitle}</p>
+            <div className="smart-banner-ui animate-in flex items-center px-4">
+                <div className="flex items-center flex-grow">
+                    <img src={app.icon} className="w-11 h-11 app-icon shadow-sm mr-3" />
+                    <div className="flex-grow min-w-0">
+                        <h4 className="font-bold text-[14px] text-gray-900 truncate leading-tight">{app.name}</h4>
+                        <p className="text-[12px] text-gray-500 truncate leading-tight mt-0.5">{app.subtitle}</p>
+                    </div>
                 </div>
-                <button 
-                    onClick={() => window.open(app.url, '_blank')}
-                    className="p-1 text-blue-500 hover:opacity-70 transition-opacity"
-                >
-                    <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                        <path d="M12 15V3m0 0l-3 3m3-3l3 3M5 13v6a2 2 0 002 2h10a2 2 0 002-2v-6"/>
-                    </svg>
-                </button>
+                <div className="flex items-center gap-2">
+                    <button 
+                        onClick={() => window.open(app.url, '_blank')}
+                        className="p-1.5 text-blue-500 hover:opacity-70 transition-opacity flex items-center justify-center"
+                    >
+                        <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 15V3m0 0l-3 3m3-3l3 3M5 13v6a2 2 0 002 2h10a2 2 0 002-2v-6"/>
+                        </svg>
+                    </button>
+                    <button onClick={onClose} className="p-1.5 text-gray-400 hover:text-gray-600 transition-colors">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
             </div>
         );
     }
@@ -310,7 +318,6 @@
     };
 
     const AppListItem = ({ app, onSelect }) => {
-        const appleId = getAppleId(app.url);
         return (
             <div 
                 onClick={() => onSelect(app)}
@@ -363,7 +370,7 @@
             window.history.pushState({ path: newUrl }, '', newUrl);
           }
           setSelectedApp(app);
-          // Always stay on same page but show banner
+          window.scrollTo({ top: 0, behavior: 'smooth' });
       };
 
       const handleCloseBanner = () => {
@@ -414,13 +421,18 @@
 
                     <div className="animate-in">
                         {activeTab === 'today' && !searchTerm && (
-                            <div className="warning-box p-6 mb-10 animate-in">
-                                <div className="flex items-start gap-3">
-                                    <svg className="w-6 h-6 text-blue-600 mt-1 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                                    <div className="text-sm font-semibold leading-relaxed text-blue-900">
-                                        <p className="mb-1 uppercase tracking-wider text-[11px] opacity-70">คำเตือนที่สำคัญ</p>
-                                        <p>• ต้องเข้าสู่ระบบ Apple ID ก่อนเท่านั้น จึงจะสามารถดาวน์โหลดแอปพลิเคชันได้</p>
-                                        <p>• เมื่อดาวน์โหลดแอปพลิเคชันแล้วจะไม่สามารถลบแอปพลิเคชันได้</p>
+                            <div className="guideline-box p-6 mb-10 animate-in">
+                                <div className="flex items-start gap-4">
+                                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
+                                        <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    </div>
+                                    <div className="text-[15px] font-semibold leading-relaxed text-blue-900">
+                                        <h3 className="mb-2 uppercase tracking-widest text-[12px] font-extrabold opacity-80 text-blue-700">คำแนะนำที่สำคัญ</h3>
+                                        <ul className="space-y-2">
+                                            <li>• ต้องเข้าสู่ระบบ Apple ID ก่อนเท่านั้น จึงจะสามารถดาวน์โหลดแอปพลิเคชันได้</li>
+                                            <li>• เมื่อดาวน์โหลดแอปพลิเคชันแล้วจะไม่สามารถลบแอปพลิเคชันได้</li>
+                                            <li>• หากต้องการดาวน์โหลดแอปพลิเคชันที่ต้องชำระเงิน ต้องกดซื้อใน App store บน iPhone หรือ iPad ที่ใช้ Apple ID เดียวกับ iPad ของโรงเรียนก่อน จึงจะสามารถดาวน์โหลดแอปพลิเคชันได้</li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
