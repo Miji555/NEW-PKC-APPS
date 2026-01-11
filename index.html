@@ -146,12 +146,6 @@
         transition: all 0.3s ease;
     }
 
-    /* Page transitions */
-    .page-exit { opacity: 1; transition: opacity 0.3s ease; }
-    .page-exit-active { opacity: 0; }
-    .page-enter { opacity: 0; }
-    .page-enter-active { opacity: 1; transition: opacity 0.3s ease; }
-
     .scrollbar-hide::-webkit-scrollbar { display: none; }
   </style>
 
@@ -197,9 +191,14 @@
             </svg>
         ),
         apps: [
-          { id: 'minecraft', name: 'Minecraft', subtitle: 'สร้างโลกของคุณ', url: 'https://apps.apple.com/th/app/minecraft/id479516143', icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/91/9e/7b/919e7b30-c831-50e5-7973-206e0176f183/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/256x256bb.png' },
           { id: 'rov', name: 'RoV', subtitle: '5v5 MOBA', url: 'https://apps.apple.com/th/app/garena-rov-5v5-festival/id1150337432', icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/21/92/8a/21928ab1-2a6c-e06a-9351-831518f9746b/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/256x256bb.png' },
-          { id: 'genshin', name: 'Genshin Impact', subtitle: 'Open World RPG', url: 'https://apps.apple.com/th/app/genshin-impact/id1517783697', icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/5a/82/35/5a823573-0973-7e61-3951-831518f9746b/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/256x256bb.png' }
+          { id: 'mlbb', name: 'Mobile Legends: Bang Bang', subtitle: 'Global 5v5 MOBA', url: 'https://apps.apple.com/th/app/mobile-legends-bang-bang/id1160056295?l=th', icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/c3/00/98/c3009890-a616-23c5-6804-06927d118933/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/256x256bb.png' },
+          { id: 'codm', name: 'Call of Duty: Mobile', subtitle: 'Epic FPS Action', url: 'https://apps.apple.com/th/app/call-of-duty-mobile-garena/id1465688043?l=th', icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/91/9e/7b/919e7b30-c831-50e5-7973-206e0176f183/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/256x256bb.png' },
+          { id: 'speeddrifters', name: 'Garena Speed Drifters', subtitle: 'Speed & Racing', url: 'https://apps.apple.com/th/app/garena-speed-drifters/id1416604843?l=th', icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/6b/64/73/6b64736a-2975-298a-784c-39655866164d/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/256x256bb.png' },
+          { id: 'minecraft', name: 'Minecraft', subtitle: 'สร้างโลกของคุณ', url: 'https://apps.apple.com/th/app/minecraft/id479516143', icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/91/9e/7b/919e7b30-c831-50e5-7973-206e0176f183/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/256x256bb.png' },
+          { id: 'genshin', name: 'Genshin Impact', subtitle: 'Open World RPG', url: 'https://apps.apple.com/th/app/genshin-impact/id1517783697', icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/5a/82/35/5a823573-0973-7e61-3951-831518f9746b/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/256x256bb.png' },
+          { id: 'starrail', name: 'Honkai: Star Rail', subtitle: 'Space Fantasy RPG', url: 'https://apps.apple.com/th/app/honkai-star-rail/id1599719154?l=th', icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/05/85/33/05853335-50e5-7973-206e-0176f183936a/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/256x256bb.png' },
+          { id: 'cookierun_kingdom', name: 'CookieRun: Kingdom', subtitle: 'Base Building RPG', url: 'https://apps.apple.com/th/app/cookierun-kingdom/id1509450845?l=th', icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/e0/8a/6c/e08a6c8e-2975-298a-784c-39655866164d/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/256x256bb.png' }
         ]
       },
       {
@@ -219,8 +218,11 @@
           { id: 'tiktok', name: 'TikTok', subtitle: 'Watch, Create, Share', url: 'https://apps.apple.com/th/app/tiktok/id1235601864', icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/18/d8/67/18d867c2-9e2c-47d0-1498-5c493c403330/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/256x256bb.png' },
           { id: 'duolingo', name: 'Duolingo', subtitle: 'เรียนภาษาได้ทุกที่', url: 'https://apps.apple.com/th/app/duolingo-%E0%B9%81%E0%B8%AD%E0%B8%9B%E0%B9%80%E0%B8%A3-%E0%B8%A2%E0%B8%99%E0%B8%A0%E0%B8%B2%E0%B8%A9%E0%B8%B2/id570060128?l=th', icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/4a/04/00/4a040082-9092-23c5-6804-06927d118933/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/256x256bb.png' },
           { id: 'notes', name: 'Notes', subtitle: 'Capture your thoughts.', url: 'https://apps.apple.com/th/app/notes/id1609361989?l=th', icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/66/8b/6e/668b6e6e-d964-6725-d912-3269894e7724/AppIcon-0-0-1x_U007emarketing-0-7-0-sRGB-85-220.png/256x256bb.png' },
-          { id: 'goodnotes', name: 'Goodnotes', subtitle: 'AI Notes, PDF & Markup', url: 'https://apps.apple.com/th/app/goodnotes-ai-%E0%B9%82%E0%B8%99-%E0%B8%95-%E0%B9%80%E0%B8%AD%E0%B8%81%E0%B8%AA%E0%B8%B2%E0%B8%A3-pdf/id1444383602?l=th', icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/6a/7e/6a/6a7e6a6b-d8b3-6e3e-6a6b-d8b36e3e6a6b/AppIcon-0-0-1x_U007emarketing-0-7-0-sRGB-85-220.png/256x256bb.png' },
-          { id: 'notability', name: 'Notability', subtitle: 'Smarter AI Notes', url: 'https://apps.apple.com/th/app/notability-smarter-ai-notes/id360593530?l=th', icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/6b/64/73/6b64736a-2975-298a-784c-39655866164d/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/256x256bb.png' }
+          { id: 'disney', name: 'Disney+ Hotstar', subtitle: 'สตรีมเลย', url: 'https://apps.apple.com/th/app/disney-%E0%B8%AA%E0%B8%95%E0%B8%A3-%E0%B8%A1%E0%B9%80%E0%B8%A5%E0%B8%A2/id1524156685?l=th', icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/c3/00/98/c3009890-a616-23c5-6804-06927d118933/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/256x256bb.png' },
+          { id: 'viu', name: 'Viu', subtitle: 'ซีรีส์เกาหลีและวาไรตี้', url: 'https://apps.apple.com/th/app/viu/id1036095179?l=th', icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/05/85/33/05853335-50e5-7973-206e-0176f183936a/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/256x256bb.png' },
+          { id: 'google_app', name: 'Google', subtitle: 'Search, shop, and discover', url: 'https://apps.apple.com/th/app/google/id284815942?l=th', icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/a4/66/16/a4661642-4217-09f1-3a0e-a6a2a0d7a049/AppIcon-0-0-1x_U007emarketing-0-7-0-sRGB-85-220.png/256x256bb.png' },
+          { id: 'gmail', name: 'Gmail', subtitle: 'Secure and smart email', url: 'https://apps.apple.com/th/app/gmail-%E0%B8%AD-%E0%B9%80%E0%B8%A1%E0%B8%A5%E0%B8%88%E0%B8%B2%E0%B8%81-google/id422689480?l=th', icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/51/66/7e/51667e6a-2975-298a-784c-39655866164d/AppIcon-0-0-1x_U007emarketing-0-7-0-sRGB-85-220.png/256x256bb.png' },
+          { id: 'drive', name: 'Google Drive', subtitle: 'Files at your fingertips', url: 'https://apps.apple.com/th/app/google-%E0%B9%84%E0%B8%94%E0%B8%A3%E0%B8%9F/id507874739?l=th', icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/34/0f/55/340f55e2-2a6c-e06a-9351-831518f9746b/AppIcon-0-0-1x_U007emarketing-0-7-0-sRGB-85-220.png/256x256bb.png' }
         ]
       },
       {
@@ -397,47 +399,62 @@
 
                 {activeTab === 'today' && !searchTerm ? (
                     <>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-16">
+                        {/* Featured Apps Section */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10">
                             <div 
-                                onClick={() => handleAppSelect(CATEGORIES.find(c => c.id === 'apps').apps[3])} 
-                                className="relative h-[550px] rounded-[40px] overflow-hidden group app-card-shadow cursor-pointer border border-white/20"
+                                onClick={() => handleAppSelect(CATEGORIES[1].apps[1])} 
+                                className="relative h-[480px] rounded-[40px] overflow-hidden group app-card-shadow cursor-pointer border border-white/20"
                             >
-                                <img src="https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&q=80&w=1000" className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80&w=1000" className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-10 text-white">
-                                    <span className="text-[14px] font-black uppercase tracking-widest text-white/60 mb-3">Editor's Choice</span>
-                                    <h2 className="text-4xl md:text-5xl font-black leading-tight mb-6">ฝึกฝนทักษะใหม่ๆ<br/>ในปี 2026!</h2>
+                                    <span className="text-[14px] font-black uppercase tracking-widest text-white/60 mb-3">Game of the Day</span>
+                                    <h2 className="text-4xl md:text-5xl font-black leading-tight mb-6">Mobile Legends:<br/>Bang Bang</h2>
                                     <div className="flex items-center gap-5 glass-capsule p-5 rounded-[30px] bg-white/10 border-white/20">
-                                        <img src="https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/4a/04/00/4a040082-9092-23c5-6804-06927d118933/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/128x128bb.png" className="w-14 h-14 app-icon shadow-lg" />
+                                        <img src={CATEGORIES[1].apps[1].icon} className="w-14 h-14 app-icon shadow-lg" />
                                         <div className="flex-grow min-w-0">
-                                            <h4 className="font-black text-base truncate">Duolingo</h4>
-                                            <p className="text-xs text-white/60 truncate uppercase font-bold tracking-wider">เรียนภาษาได้ทุกที่</p>
+                                            <h4 className="font-black text-base truncate">Mobile Legends</h4>
+                                            <p className="text-xs text-white/60 truncate uppercase font-bold tracking-wider">Join Your Friends</p>
                                         </div>
-                                        <div className="lg-btn bg-white/20 text-white border-white/30">ดู</div>
+                                        <div className="lg-btn bg-white/20 text-white border-white/30">GET</div>
                                     </div>
                                 </div>
                             </div>
                             <div 
-                                onClick={() => handleAppSelect(CATEGORIES.find(c => c.id === 'apps').apps[0])}
-                                className="relative h-[550px] rounded-[40px] overflow-hidden group app-card-shadow cursor-pointer border border-white/20"
+                                onClick={() => handleAppSelect(CATEGORIES[1].apps[2])}
+                                className="relative h-[480px] rounded-[40px] overflow-hidden group app-card-shadow cursor-pointer border border-white/20"
                             >
-                                <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1000" className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                                <img src="https://images.unsplash.com/photo-1552820728-8b83bb6b773f?auto=format&fit=crop&q=80&w=1000" className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
                                 <div className="absolute inset-0 bg-gradient-to-t from-blue-900/90 via-transparent to-transparent flex flex-col justify-end p-10 text-white">
-                                    <span className="text-[14px] font-black uppercase tracking-widest text-white/60 mb-3">Featured</span>
-                                    <h2 className="text-4xl md:text-5xl font-black leading-tight mb-6">รวมแอป AI<br/>ก้าวล้ำไปกับคุณ</h2>
+                                    <span className="text-[14px] font-black uppercase tracking-widest text-white/60 mb-3">Featured Action</span>
+                                    <h2 className="text-4xl md:text-5xl font-black leading-tight mb-6">Call of Duty<br/>Garena Action</h2>
                                     <div className="flex items-center gap-5 glass-capsule p-5 rounded-[30px] bg-white/10 border-white/20">
-                                        <img src="https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/18/d8/67/18d867c2-9e2c-47d0-1498-5c493c403330/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/128x128bb.png" className="w-14 h-14 app-icon shadow-lg" />
+                                        <img src={CATEGORIES[1].apps[2].icon} className="w-14 h-14 app-icon shadow-lg" />
                                         <div className="flex-grow min-w-0">
-                                            <h4 className="font-black text-base truncate">ChatGPT</h4>
-                                            <p className="text-xs text-white/60 truncate uppercase font-bold tracking-wider">The future of chat</p>
+                                            <h4 className="font-black text-base truncate">CODM</h4>
+                                            <p className="text-xs text-white/60 truncate uppercase font-bold tracking-wider">Fast-paced battles</p>
                                         </div>
-                                        <div className="lg-btn bg-white/20 text-white border-white/30">เปิด</div>
+                                        <div className="lg-btn bg-white/20 text-white border-white/30">GET</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <h2 className="text-3xl font-black mb-10 text-gray-800 tracking-tight">แอปยอดนิยม</h2>
+
+                        {/* Secondary Featured App */}
+                        <div 
+                            onClick={() => handleAppSelect(CATEGORIES[1].apps[3])}
+                            className="relative h-[400px] rounded-[40px] overflow-hidden group app-card-shadow cursor-pointer border border-white/20 mb-16"
+                        >
+                            <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&q=80&w=1000" className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                            <div className="absolute inset-0 bg-gradient-to-r from-orange-600/80 via-transparent to-transparent flex flex-col justify-center p-12 text-white">
+                                <span className="text-[14px] font-black uppercase tracking-widest text-white/80 mb-3">Racing Hits</span>
+                                <h2 className="text-5xl font-black leading-tight mb-6 max-w-lg">Speed Drifters:<br/>Extreme Racing</h2>
+                                <div className="lg-btn bg-white text-orange-600 font-black px-10 py-4 text-lg">PLAY NOW</div>
+                            </div>
+                        </div>
+
+                        <h2 className="text-3xl font-black mb-10 text-gray-800 tracking-tight">แอปและเกมยอดนิยม</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10">
-                            {CATEGORIES.flatMap(c => c.apps).slice(0, 8).map(app => (
+                            {CATEGORIES.flatMap(c => c.apps).slice(0, 10).map(app => (
                                 <AppListItem key={app.id} app={app} onSelect={handleAppSelect} />
                             ))}
                         </div>
