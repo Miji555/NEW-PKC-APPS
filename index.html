@@ -1,12 +1,661 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PKC APPS</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PKC APPS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- เพิ่ม Babel Standalone สำหรับแปลงโค้ด React ใน Browser โดยตรง -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <!-- Script สำหรับสร้าง Smart App Banner Meta Tag อัตโนมัติเมื่อมี appId ใน URL -->
+  <script>
+    (function() {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const appId = urlParams.get('appId');
+        if (appId) {
+          const meta = document.createElement('meta');
+          meta.name = 'apple-itunes-app';
+          meta.content = 'app-id=' + appId;
+          document.head.appendChild(meta);
+        }
+      } catch (e) {
+        console.error('Error injecting smart banner:', e);
+      }
+    })();
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', 'Noto Sans Thai', sans-serif;
+      background-color: #ffffff;
+      color: #1a1a1a;
+    }
+  </style>
+
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.2.0",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client"
+  }
+}
+</script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- รวมโค้ดทั้งหมดไว้ที่นี่เพื่อให้ทำงานได้ทันทีบน GitHub Pages -->
+  <script type="text/babel" data-type="module">
+    import React, { useState } from 'react';
+    import ReactDOM from 'react-dom/client';
+
+    // --- Data & Constants ---
+    const CONTACT_IG = 'ddddddni._o';
+
+    const CATEGORIES = [
+      {
+        id: 'games',
+        title: 'Games',
+        apps: [
+          {
+            id: 'minecraft',
+            name: 'Minecraft: สร้างโลกของคุณ',
+            subtitle: 'เกมจำลองการสร้างบล็อก',
+            url: 'https://apps.apple.com/th/app/minecraft/id479516143',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/91/9e/7b/919e7b30-c831-50e5-7973-206e0176f183/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'rov',
+            name: 'Garena RoV: 5v5 Festival',
+            subtitle: 'สุดยอดเกม MOBA 5v5 บนมือถือ',
+            url: 'https://apps.apple.com/th/app/garena-rov-5v5-festival/id1150337432',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/21/92/8a/21928ab1-2a6c-e06a-9351-831518f9746b/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'efootball',
+            name: 'eFootball™',
+            subtitle: 'สุดยอดเกมฟุตบอลสมจริง',
+            url: 'https://apps.apple.com/th/app/efootball/id1117270703?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/b8/8d/61/b88d613b-2831-2831-6e3e-7977a423758b/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'mlbb',
+            name: 'Mobile Legends: Bang Bang',
+            subtitle: 'เกม MOBA 5v5 สุดมันส์',
+            url: 'https://apps.apple.com/th/app/mobile-legends-bang-bang/id1160056295?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/1c/8a/61/1c8a613b-7f61-3951-8315-18f9746b5208/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'codm',
+            name: 'Call of Duty®: Mobile - Garena',
+            subtitle: 'สุดยอดเกมยิง FPS บนมือถือ',
+            url: 'https://apps.apple.com/th/app/call-of-duty-mobile-garena/id1465688043?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/f5/26/d7/f526d787-84c1-657d-6c1c-96b5278c5208/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'speeddrifters',
+            name: 'Garena Speed Drifters',
+            subtitle: 'เกมแข่งรถดริฟท์สุดมันส์',
+            url: 'https://apps.apple.com/th/app/garena-speed-drifters/id1416604843?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/b8/22/01/b822019a-7f61-3951-8315-18f9746b5208/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'genshin',
+            name: 'Genshin Impact',
+            subtitle: 'ผจญภัยในโลกกว้าง Open World RPG',
+            url: 'https://apps.apple.com/th/app/genshin-impact/id1517783697?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/5a/82/35/5a823573-0973-7e61-3951-831518f9746b/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'honkai3',
+            name: 'Honkai Impact 3',
+            subtitle: 'เกมแอ็กชัน 3D สุดอลังการ',
+            url: 'https://apps.apple.com/th/app/honkai-impact-3/id1299582178?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/a4/0a/61/a40a6184-7f61-3951-8315-18f9746b5208/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'honkaistarrail',
+            name: 'Honkai: Star Rail',
+            subtitle: 'การเดินทางแห่งดวงดาว Turn-based RPG',
+            url: 'https://apps.apple.com/th/app/honkai-star-rail/id1599719154?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/f1/9a/61/f19a613b-7f61-3951-8315-18f9746b5208/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'crovenbreak',
+            name: 'คุกกี้รัน: ศึกคุกกี้หนีเตาอบ',
+            subtitle: 'เกมวิ่งสุดสนุกกับเหล่าคุกกี้',
+            url: 'https://apps.apple.com/th/app/cookierun-ovenbreak/id963067330?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/37/6c/3d/376c3d52-7360-3951-8315-18f9746b5208/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'crkingdom',
+            name: 'CookieRun: Kingdom',
+            subtitle: 'สร้างอาณาจักรคุกกี้และออกผจญภัย',
+            url: 'https://apps.apple.com/th/app/cookierun-kingdom/id1509450845?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/e2/8a/61/e28a613b-7f61-3951-8315-18f9746b5208/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/100x100bb.png'
+          }
+        ]
+      },
+      {
+        id: 'ai-google',
+        title: 'AI & Google',
+        apps: [
+          {
+            id: 'gemini',
+            name: 'Google Gemini',
+            subtitle: 'แชทกับ AI จาก Google',
+            url: 'https://apps.apple.com/th/app/google-gemini/id6477489729?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/4a/04/00/4a040082-9092-23c5-6804-06927d118933/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'chatgpt',
+            name: 'ChatGPT',
+            subtitle: 'AI แชทบอทจาก OpenAI',
+            url: 'https://apps.apple.com/th/app/chatgpt/id6448311069?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/18/d8/67/18d867c2-9e2c-47d0-1498-5c493c403330/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'grok',
+            name: 'Grok',
+            subtitle: 'AI จาก xAI ของ Elon Musk',
+            url: 'https://apps.apple.com/th/app/grok/id6670324846?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/91/9e/7b/919e7b30-c831-50e5-7973-206e0176f183/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'google-search',
+            name: 'Google',
+            subtitle: 'ค้นหาข้อมูลที่คุณต้องการ',
+            url: 'https://apps.apple.com/th/app/google/id284815942?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/b8/8d/61/b88d613b-2831-2831-6e3e-7977a423758b/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/100x100bb.png'
+          }
+        ]
+      },
+      {
+        id: 'productivity-notes',
+        title: 'Productivity & Notes',
+        apps: [
+          {
+            id: 'apple-notes',
+            name: 'Notes',
+            subtitle: 'จดบันทึกและจัดระเบียบความคิด',
+            url: 'https://apps.apple.com/th/app/notes/id1609361989?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/ee/18/34/ee183424-740e-fb3c-74a9-a9a5f22d56a0/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'goodnotes',
+            name: 'Goodnotes AI โน้ต & เอกสาร PDF',
+            subtitle: 'จดบันทึกด้วย AI และแก้ไข PDF',
+            url: 'https://apps.apple.com/th/app/goodnotes-ai-%E0%B9%82%E0%B8%99-%E0%B8%95-%E0%B9%80%E0%B8%AD%E0%B8%81%E0%B8%AA%E0%B8%B2%E0%B8%A3-pdf/id1444383602?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/5a/0f/ce/5a0fce69-4258-202d-fb5c-0504f210410a/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'notability',
+            name: 'Notability: Smarter AI Notes',
+            subtitle: 'บันทึก จด และวาดความคิดของคุณ',
+            url: 'https://apps.apple.com/th/app/notability-smarter-ai-notes/id360593530?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple116/v4/a4/09/b3/a409b3fc-1ed3-e847-a720-302a275e0541/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/100x100bb.png'
+          }
+        ]
+      },
+      {
+        id: 'sns',
+        title: 'SNS',
+        apps: [
+          {
+            id: 'facebook',
+            name: 'Facebook',
+            subtitle: 'ติดต่อกับเพื่อนและครอบครัว',
+            url: 'https://apps.apple.com/th/app/facebook/id284882215?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/8d/62/1d/8d621d74-2c26-5384-6330-84c68023758b/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'messenger',
+            name: 'Messenger',
+            subtitle: 'ข้อความและวิดีโอแชทฟรี',
+            url: 'https://apps.apple.com/th/app/messenger/id454638411?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/55/26/d7/5526d787-84c1-657d-6c1c-96b5278c5208/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'instagram',
+            name: 'Instagram',
+            subtitle: 'แชร์รูปภาพและวิดีโอ',
+            url: 'https://apps.apple.com/th/app/instagram/id389801252?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/c7/2b/96/c72b9631-f18b-6677-789a-6c174358826d/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'tiktok',
+            name: 'TikTok',
+            subtitle: 'วิดีโอสั้นเพื่อความบันเทิง',
+            url: 'https://apps.apple.com/th/app/tiktok/id1235601864?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/18/d8/67/18d867c2-9e2c-47d0-1498-5c493c403330/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/100x100bb.png'
+          }
+        ]
+      },
+      {
+        id: 'movies',
+        title: 'Movies & Videos',
+        apps: [
+          {
+            id: 'netflix',
+            name: 'Netflix',
+            subtitle: 'ภาพยนตร์และรายการทีวี',
+            url: 'https://apps.apple.com/th/app/netflix/id363590051?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/a4/0a/61/a40a6184-7f61-3951-8315-18f9746b5208/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'iqiyi',
+            name: 'iQIYI',
+            subtitle: 'ซีรีส์, วาไรตี้โชว์',
+            url: 'https://apps.apple.com/th/app/iqiyi/id1461999674?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/37/6c/3d/376c3d52-7360-3951-8315-18f9746b5208/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'bilibili',
+            name: 'Bilibili',
+            subtitle: 'อนิเมะ HD, วิดีโอ',
+            url: 'https://apps.apple.com/th/app/bilibili/id1548857482?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/71/3b/6e/713b6e74-7f61-3951-8315-18f9746b5208/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'youtube',
+            name: 'YouTube',
+            subtitle: 'วิดีโอ, เพลง และสตรีมสด',
+            url: 'https://apps.apple.com/th/app/youtube/id544007664?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/2d/3a/0d/2d3a0d33-7f61-3951-8315-18f9746b5208/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'disney',
+            name: 'Disney+ Hotstar',
+            subtitle: 'สตรีมมิ่งจาก Disney, Marvel, Star Wars',
+            url: 'https://apps.apple.com/th/app/disney-hotstar/id1524156685?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/44/22/01/4422019a-7f61-3951-8315-18f9746b5208/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'viu',
+            name: 'Viu',
+            subtitle: 'ซีรีส์เกาหลีและเอเชียยอดนิยม',
+            url: 'https://apps.apple.com/th/app/viu/id1036095179?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/3d/8a/61/3d8a613b-7f61-3951-8315-18f9746b5208/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'wetv',
+            name: 'WeTV',
+            subtitle: 'ซีรีส์และอนิเมะจีนระดับพรีเมียม',
+            url: 'https://apps.apple.com/th/app/wetv/id1441531611?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/f1/9a/61/f19a613b-7f61-3951-8315-18f9746b5208/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'trueid',
+            name: 'TrueID',
+            subtitle: 'ความบันเทิงและกีฬาครบจบในแอปเดียว',
+            url: 'https://apps.apple.com/th/app/trueid/id1013814221?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/e2/8a/61/e28a613b-7f61-3951-8315-18f9746b5208/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/100x100bb.png'
+          }
+        ]
+      },
+      {
+        id: 'utility',
+        title: 'Utility',
+        apps: [
+          {
+            id: 'gmail',
+            name: 'Gmail',
+            subtitle: 'อีเมลที่ปลอดภัยและจัดระเบียบ',
+            url: 'https://apps.apple.com/th/app/gmail-%E0%B8%AD-%E0%B9%80%E0%B8%A1%E0%B8%A5%E0%B8%88%E0%B8%B2%E0%B8%81-google/id422689480?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/8d/62/1d/8d621d74-2c26-5384-6330-84c68023758b/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'google-drive',
+            name: 'Google Drive',
+            subtitle: 'เก็บและแชร์ไฟล์ได้ทุกที่',
+            url: 'https://apps.apple.com/th/app/google-%E0%B9%84%E0%B8%94%E0%B8%A3%E0%B8%9F/id507874739?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/21/92/8a/21928ab1-2a6c-e06a-9351-831518f9746b/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'meitu',
+            name: 'Meitu- Photo & Video Editor',
+            subtitle: 'แต่งรูปสวยและวีดีโอ',
+            url: 'https://apps.apple.com/th/app/meitu-photo-video-editor/id416048305',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/4a/04/00/4a040082-9092-23c5-6804-06927d118933/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'spotify',
+            name: 'Spotify - Music and Podcasts',
+            subtitle: 'ฟังเพลงและพอดแคสต์',
+            url: 'https://apps.apple.com/th/app/spotify-music-and-podcasts/id324684580',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/7e/f0/a0/7ef0a012-70b1-129a-2481-2090875e656d/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/100x100bb.png'
+          },
+          {
+            id: 'procreate',
+            name: 'Procreate',
+            subtitle: 'สเก็ตช์, ระบายสี, สร้างสรรค์',
+            url: 'https://apps.apple.com/th/app/procreate/id425073498?l=th',
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/5a/82/35/5a823573-0973-7e61-3951-831518f9746b/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/100x100bb.png'
+          }
+        ]
+      }
+    ];
+
+    // --- Helpers ---
+    const getAppleId = (url) => {
+      if (!url) return null;
+      const match = url.match(/id(\d+)/);
+      return match ? match[1] : null;
+    };
+
+    // --- Components ---
+
+    const Header = ({ searchTerm, onSearchChange }) => {
+      return (
+        <div className="mb-8 border-b border-[#d0d7de] pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex-grow">
+            <h1 className="text-2xl font-semibold text-[#1f2328] mb-1">
+              PKC APPS
+            </h1>
+            <p className="text-[#636c76] text-sm">
+              Download และ Updates แอปพลิเคชัน สำหรับ iPad ของโรงเรียน
+            </p>
+          </div>
+          <div className="relative w-full md:w-64">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg className="h-4 w-4 text-[#636c76]" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M10.68 11.74a6 0 1 1 1.06-1.06l3.91 3.91a.75.75 0 1 1-1.06 1.06l-3.91-3.91zM11 7a4 4 0 1 0-8 0 4 4 0 0 0 8 0z" />
+              </svg>
+            </div>
+            <input
+              type="text"
+              placeholder="ค้นหาแอพ..."
+              value={searchTerm}
+              onChange={(e) => onSearchChange(e.target.value)}
+              className="block w-full pl-10 pr-3 py-1.5 text-sm bg-[#f6f8fa] border border-[#d0d7de] rounded-md focus:outline-none focus:ring-2 focus:ring-[#0969da] focus:border-transparent transition-all placeholder:text-[#636c76]"
+            />
+            {searchTerm && (
+              <button 
+                onClick={() => onSearchChange('')}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-[#636c76] hover:text-[#1f2328]"
+              >
+                <svg className="h-4 w-4" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.75.75 0 1 1 1.06 1.06L9.06 8l3.22 3.22a.75.75 0 1 1-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 0 1-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06z" />
+                </svg>
+              </button>
+            )}
+          </div>
+        </div>
+      );
+    };
+
+    const CategorySection = ({ category }) => {
+      const [isExpanded, setIsExpanded] = React.useState(false);
+      
+      if (category.apps.length === 0) return null;
+
+      const LIMIT = 4;
+      const hasMore = category.apps.length > LIMIT;
+      const displayedApps = isExpanded ? category.apps : category.apps.slice(0, LIMIT);
+
+      return (
+        <div className="border border-[#d0d7de] rounded-md overflow-hidden bg-white shadow-sm">
+          {/* Category Header Bar */}
+          <div className="bg-[#f6f8fa] px-4 py-3 border-b border-[#d0d7de] flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <svg className="w-4 h-4 text-[#636c76]" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M1.75 1A1.75 1.75 0 000 2.75v10.5C0 14.216.784 15 1.75 15h12.5A1.75 1.75 0 0016 13.25v-8.5A1.75 1.75 0 0014.25 3H7.5a.25.25 0 01-.2-.1l-.9-1.2c-.33-.44-.85-.7-1.4-.7h-3.25z"></path>
+              </svg>
+              <span className="font-semibold text-[#1f2328] text-sm">{category.title}</span>
+            </div>
+            <span className="text-xs text-[#636c76]">{category.apps.length} items</span>
+          </div>
+          
+          {/* App Rows */}
+          <div className="divide-y divide-[#d0d7de]">
+            {displayedApps.map((app) => {
+              // Extract Apple ID for internal linking
+              const appleId = getAppleId(app.url);
+              // If we have an ID, link to our internal detail page (?appId=...), otherwise external link
+              const href = appleId ? `?appId=${appleId}` : app.url;
+              const target = appleId ? '_self' : '_blank';
+
+              return (
+                <div 
+                  key={app.id}
+                  className="px-4 py-3 hover:bg-[#f6f8fa] transition-colors flex items-center justify-between group"
+                >
+                  <div className="flex items-center space-x-3 overflow-hidden">
+                    {app.icon ? (
+                      <img 
+                        src={app.icon} 
+                        alt="" 
+                        className="w-8 h-8 rounded-lg flex-shrink-0"
+                        referrerPolicy="no-referrer"
+                      />
+                    ) : (
+                      <svg className="w-8 h-8 text-[#636c76] flex-shrink-0" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l3.25 3.25c.33.328.513.773.513 1.237v9.25A1.75 1.75 0 0113.586 16H3.75A1.75 1.75 0 012 14.25V1.75zm1.75-.25a.25.25 0 00-.25.25v12.5c0 .138.112.25.25.25h9.836a.25.25 0 00.25-.25V5.25H10.25a.75.75 0 01-.75-.75V1.5H3.75zM11 4.25h2.336L11 1.914v2.336z"></path>
+                      </svg>
+                    )}
+                    <div className="flex flex-col truncate">
+                      <a 
+                        href={href}
+                        target={target}
+                        className="text-[#0969da] font-medium hover:underline text-sm truncate"
+                      >
+                        {app.name}
+                      </a>
+                      {app.subtitle && (
+                        <span className="text-[11px] text-[#636c76] truncate">
+                          {app.subtitle}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <a 
+                    href={href}
+                    target={target}
+                    className="text-xs font-medium text-[#1f2328] bg-white border border-[#d0d7de] px-3 py-1.5 rounded shadow-sm hover:bg-[#f3f4f6] transition-colors whitespace-nowrap opacity-0 group-hover:opacity-100 focus:opacity-100"
+                  >
+                    Download
+                  </a>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Show More Button */}
+          {hasMore && (
+            <button
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="w-full py-2.5 bg-white text-[#0969da] text-xs font-semibold hover:bg-[#f6f8fa] transition-colors border-t border-[#d0d7de] flex items-center justify-center space-x-1"
+            >
+              <span>{isExpanded ? 'แสดงน้อยลง' : `ดูเพิ่มเติม (${category.apps.length - LIMIT} แอพ)`}</span>
+              <svg 
+                className={`w-3 h-3 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} 
+                viewBox="0 0 16 16" 
+                fill="currentColor"
+              >
+                <path d="M4.47 7.47a.75.75 0 0 1 1.06 0L8 9.94l2.47-2.47a.75.75 0 1 1 1.06 1.06l-3 3a.75.75 0 0 1-1.06 0l-3-3a.75.75 0 0 1 0-1.06z"></path>
+              </svg>
+            </button>
+          )}
+        </div>
+      );
+    };
+
+    const DetailView = ({ appId }) => {
+        // Flatten all apps to find the one matching the ID
+        const allApps = CATEGORIES.flatMap(c => c.apps);
+        const app = allApps.find(a => getAppleId(a.url) === appId);
+
+        const handleBack = (e) => {
+            e.preventDefault();
+            // Force reload to base path to clear query params and banner state
+            window.location.href = window.location.pathname;
+        };
+
+        if (!app) {
+             return (
+                 <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
+                    <p className="text-lg text-gray-600">App not found</p>
+                    <a href={window.location.pathname} onClick={handleBack} className="text-[#0969da] hover:underline font-medium">Back to Home</a>
+                 </div>
+             );
+        }
+
+        return (
+            <div className="flex flex-col items-center pt-8 px-4 text-center animate-in fade-in duration-500">
+                 <img 
+                    src={app.icon} 
+                    className="w-24 h-24 rounded-[22px] mb-6 shadow-md border border-gray-100" 
+                    alt={app.name} 
+                    referrerPolicy="no-referrer"
+                 />
+                 
+                 <h1 className="text-2xl font-bold text-[#1f2328] mb-2">
+                    {app.name}
+                 </h1>
+                 
+                 <h2 className="text-xl font-semibold text-[#0969da] mb-6">
+                    Download และ Updates
+                 </h2>
+
+                 {/* Warning Box */}
+                 <div className="w-full max-w-md bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6 text-left">
+                    <div className="flex gap-3">
+                        <div className="text-yellow-600 flex-shrink-0 mt-0.5">
+                            <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                            </svg>
+                        </div>
+                        <p className="text-yellow-800 text-sm font-medium leading-relaxed">
+                           ใช้ Safari เท่านั้น ถ้าแอพไม่ขึ้นให้ Download ลองเข้าออก Safari ใหม่ หรือ Restart iPad ของคุณ
+                        </p>
+                    </div>
+                 </div>
+                 
+                 <div className="w-full max-w-md bg-[#f6f8fa] border border-[#d0d7de] rounded-lg p-6 mb-8 text-left">
+                    <p className="text-[#1f2328] text-sm leading-relaxed mb-4 font-medium">
+                       คำแนะนำ (Instructions)
+                    </p>
+                    <ul className="text-[#636c76] text-sm space-y-2 list-disc list-inside">
+                        <li>
+                            หากเปิดใน <strong>Safari</strong> แบนเนอร์สำหรับดาวน์โหลดจะปรากฏที่ด้านบนสุดของหน้าจอ
+                        </li>
+                        <li>
+                            If opened in <strong>Safari</strong>, the download banner will appear at the very top of the screen.
+                        </li>
+                    </ul>
+                 </div>
+
+                 <a 
+                    href={window.location.pathname}
+                    onClick={handleBack}
+                    className="text-sm text-[#0969da] hover:underline flex items-center font-medium px-4 py-2 rounded-full hover:bg-blue-50 transition-colors cursor-pointer"
+                 >
+                    <svg className="w-4 h-4 mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                        <path d="M15 19l-7-7 7-7" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    Back to Apps
+                 </a>
+            </div>
+        );
+    };
+
+    const App = () => {
+      const [view, setView] = React.useState('list');
+      const [currentAppId, setCurrentAppId] = React.useState(null);
+      const [searchTerm, setSearchTerm] = React.useState('');
+
+      React.useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const appId = params.get('appId');
+        if (appId) {
+            setCurrentAppId(appId);
+            setView('detail');
+        } else {
+            setView('list');
+        }
+      }, []);
+
+      const filteredCategories = CATEGORIES.map(category => ({
+        ...category,
+        apps: category.apps.filter(app => 
+          app.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+          (app.subtitle && app.subtitle.toLowerCase().includes(searchTerm.toLowerCase()))
+        )
+      })).filter(category => category.apps.length > 0);
+
+      return (
+        <div className="min-h-screen bg-white py-8 px-4 flex flex-col items-center">
+          <div className="w-full max-w-3xl">
+            {/* Header Section (Always Visible) */}
+            <Header searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+
+            {view === 'list' ? (
+                <>
+                    {/* Warning Banner */}
+                    <div className="w-full bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                        <div className="flex gap-3">
+                            <div className="text-yellow-600 flex-shrink-0 mt-0.5">
+                                <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                                </svg>
+                            </div>
+                            <div className="text-yellow-800 text-sm font-medium leading-relaxed">
+                                <p className="font-bold mb-1">คำเตือน (Warning)</p>
+                                <ul className="list-disc list-inside space-y-1">
+                                    <li>ต้องเข้าสู่ระบบ Apple ID ก่อนเท่านั้น จึงจะสามารถดาวน์โหลดแอปพลิเคชันได้</li>
+                                    <li>เมื่อดาวน์โหลดแอปพลิเคชันแล้วจะไม่สามารถลบแอปพลิเคชันได้</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* App Lists */}
+                    <div className="space-y-6">
+                      {filteredCategories.length > 0 ? (
+                        filteredCategories.map((category) => (
+                          <CategorySection key={category.id} category={category} />
+                        ))
+                      ) : (
+                        <div className="text-center py-12 border border-dashed border-[#d0d7de] rounded-md">
+                          <svg className="w-12 h-12 text-[#636c76] mx-auto mb-3 opacity-50" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M10.68 11.74a6 0 1 1 1.06-1.06l3.91 3.91a.75.75 0 1 1-1.06 1.06l-3.91-3.91zM11 7a4 4 0 1 0-8 0 4 4 0 0 0 8 0z" />
+                          </svg>
+                          <p className="text-[#636c76]">ไม่พบแอปที่คุณค้นหา</p>
+                        </div>
+                      )}
+                    </div>
+                </>
+            ) : (
+                <DetailView appId={currentAppId} />
+            )}
+
+            {/* Footer */}
+            <footer className="mt-12 pt-8 border-t border-[#d0d7de] text-center text-[#636c76] text-sm">
+              <p>© {new Date().getFullYear()} PKC APPS • ระบบดาวน์โหลดและอัปเดตแอปพลิเคชัน</p>
+            </footer>
+          </div>
+        </div>
+      );
+    }
+
+    // --- Mount ---
+    const rootElement = document.getElementById('root');
+    if (!rootElement) {
+      throw new Error("Could not find root element to mount to");
+    }
+
+    const root = ReactDOM.createRoot(rootElement);
+    root.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    );
+  </script>
+</body>
 </html>
