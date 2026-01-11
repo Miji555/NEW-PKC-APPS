@@ -1,10 +1,10 @@
 
 import React, { useState, useMemo } from 'react';
-import AppCard from './components/AppCard';
-import AppDetailsModal from './components/AppDetailsModal';
-import AIAdvisor from './components/AIAdvisor';
-import { AppInfo, AppCategory } from './types';
-import { MOCK_APPS } from './constants';
+import AppCard from './components/AppCard.tsx';
+import AppDetailsModal from './components/AppDetailsModal.tsx';
+import AIAdvisor from './components/AIAdvisor.tsx';
+import { AppInfo, AppCategory } from './types.ts';
+import { MOCK_APPS } from './constants.ts';
 
 const App: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<AppCategory>(AppCategory.ALL);
@@ -12,7 +12,7 @@ const App: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const displayApps = useMemo(() => {
-    let apps = MOCK_APPS;
+    let apps = MOCK_APPS || [];
     if (searchQuery.trim()) {
       const lowerQuery = searchQuery.toLowerCase();
       apps = apps.filter(app => 
@@ -71,7 +71,7 @@ const App: React.FC = () => {
 
           <main className="max-w-5xl mx-auto px-6 mt-8">
             {/* Download Banner Section (Only on "All") */}
-            {activeCategory === AppCategory.ALL && !searchQuery && (
+            {activeCategory === AppCategory.ALL && !searchQuery && featuredApp && (
               <section className="mb-12">
                 <div 
                   onClick={() => setSelectedApp(featuredApp)}
