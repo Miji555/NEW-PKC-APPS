@@ -1,11 +1,10 @@
 
 export enum AppCategory {
   ALL = 'All',
-  PRODUCTIVITY = 'Productivity',
   GAMES = 'Games',
-  CREATIVE = 'Creative',
-  LIFESTYLE = 'Lifestyle',
-  UTILITIES = 'Utilities'
+  SNS = 'SNS',
+  UTILITY = 'Utility',
+  PRODUCTIVITY = 'Productivity'
 }
 
 export interface AppInfo {
