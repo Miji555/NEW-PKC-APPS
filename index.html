@@ -53,18 +53,49 @@
         filter: blur(80px);
     }
 
+    /* Liquid Glass Button Design */
+    .lg-btn {
+        position: relative;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #007AFF;
+        font-weight: 700;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        filter: url(#filter); /* Apply the organic displacement filter */
+        padding: 6px 20px;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .lg-btn:active {
+        transform: scale(0.92);
+        background: rgba(0, 0, 0, 0.05);
+    }
+
+    /* Dark Mode Sidebar */
+    .glass-sidebar {
+        background: rgba(28, 28, 30, 0.95); /* iOS System Gray 6 (Dark) */
+        backdrop-filter: blur(40px) saturate(180%);
+        -webkit-backdrop-filter: blur(40px) saturate(180%);
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .sidebar-item-active {
+        background: rgba(255, 255, 255, 0.1);
+        color: #0A84FF; /* iOS Blue (Dark) */
+    }
+
     .glass-panel {
         background: rgba(255, 255, 255, 0.4);
         backdrop-filter: blur(30px) saturate(200%);
         -webkit-backdrop-filter: blur(30px) saturate(200%);
         border: 1px solid rgba(255, 255, 255, 0.3);
-    }
-
-    .glass-sidebar {
-        background: rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(40px) saturate(180%);
-        -webkit-backdrop-filter: blur(40px) saturate(180%);
-        border-right: 1px solid rgba(0, 0, 0, 0.05);
     }
 
     .app-card-shadow {
@@ -86,11 +117,6 @@
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
-    }
-
-    .sidebar-item-active {
-        background: rgba(0, 0, 0, 0.05);
-        color: #007AFF;
     }
 
     .app-icon {
@@ -122,6 +148,14 @@
 <body>
   <div class="liquid-bg"></div>
   <div id="root"></div>
+
+  <!-- SVG Filter for Liquid Glass Buttons -->
+  <svg style="display: none">
+    <filter id="filter" color-interpolation-filters="linearRGB" filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse">
+      <feDisplacementMap in="SourceGraphic" in2="SourceGraphic" scale="12" xChannelSelector="R" yChannelSelector="B" x="0%" y="0%" width="100%" height="100%" result="displacementMap" />
+      <feGaussianBlur stdDeviation="1.5" x="0%" y="0%" width="100%" height="100%" in="displacementMap" edgeMode="none" result="blur" />
+    </filter>
+  </svg>
 
   <script type="text/babel" data-type="module">
     import React, { useState, useMemo, useEffect, useRef } from 'react';
@@ -218,13 +252,11 @@
                     const float NUM_ONE = 1.0;
                     const float NUM_TWO = 2.0;
                     const float POWER_EXPONENT = 6.0;
-                    const float MASK_MULTIPLIER_1 = 100.0; // Adjusted for smaller capsule
+                    const float MASK_MULTIPLIER_1 = 100.0;
                     const float MASK_MULTIPLIER_2 = 95.0;
-                    const float MASK_MULTIPLIER_3 = 110.0;
-                    const float LENS_MULTIPLIER = 50.0;
                     const float MASK_STRENGTH_1 = 8.0;
                     const float MASK_STRENGTH_2 = 16.0;
-                    const float LIGHTING_INTENSITY = 0.15;
+                    const float LIGHTING_INTENSITY = 0.2;
 
                     vec2 fragCoord = gl_FragCoord.xy;
                     vec2 uv = fragCoord / iResolution.xy;
@@ -237,21 +269,19 @@
                     vec2 m2 = (uv - mouse / iResolution.xy);
                     float aspect = iResolution.x / iResolution.y;
                     
-                    // Liquid Glass Box Calculation
                     float roundedBox = pow(abs(m2.x * aspect), POWER_EXPONENT) + pow(abs(m2.y), POWER_EXPONENT);
                     
                     float rb1 = clamp((NUM_ONE - roundedBox * MASK_MULTIPLIER_1) * MASK_STRENGTH_1, NUM_ZERO, NUM_ONE);
                     float rb2 = clamp((0.95 - roundedBox * MASK_MULTIPLIER_2) * MASK_STRENGTH_2, NUM_ZERO, NUM_ONE) -
                                clamp(pow(0.9 - roundedBox * MASK_MULTIPLIER_2, NUM_ONE) * MASK_STRENGTH_2, NUM_ZERO, NUM_ONE);
 
-                    // Creating a glass reflection effect without texture
-                    vec3 baseColor = vec3(1.0, 1.0, 1.0); // White glass reflection
+                    vec3 baseColor = vec3(1.0, 1.0, 1.0);
                     float transition = smoothstep(NUM_ZERO, NUM_ONE, rb1 + rb2);
                     
                     float gradient = clamp((m2.y + 0.1) / NUM_TWO, NUM_ZERO, NUM_ONE);
                     vec3 lighting = (baseColor * rb1 * gradient) + (vec3(1.0) * rb2 * LIGHTING_INTENSITY);
                     
-                    gl_FragColor = vec4(lighting, transition * 0.4); // Semi-transparent glass
+                    gl_FragColor = vec4(lighting, transition * 0.45);
                 }
             `;
 
@@ -287,7 +317,7 @@
                 const clientX = e.touches ? e.touches[0].clientX : e.clientX;
                 const clientY = e.touches ? e.touches[0].clientY : e.clientY;
                 mousePos.x = clientX - rect.left;
-                mousePos.y = rect.bottom - clientY; // WebGL Y is bottom-up
+                mousePos.y = rect.bottom - clientY;
             };
 
             const container = containerRef.current;
@@ -326,7 +356,6 @@
     };
 
     const Sidebar = ({ activeTab, onTabChange, searchTerm, onSearchChange }) => {
-        const sidebarRef = useRef(null);
         return (
             <div className="sidebar-desktop fixed left-0 top-0 h-full w-[300px] flex-col p-6 glass-sidebar z-50">
                 <div className="mb-8 flex items-center gap-2 px-2">
@@ -345,23 +374,33 @@
                         placeholder="ค้นหา" 
                         value={searchTerm}
                         onChange={(e) => onSearchChange(e.target.value)}
-                        className="w-full bg-black/5 rounded-xl py-2.5 pl-9 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                        className="w-full bg-white/10 rounded-xl py-2.5 pl-9 pr-4 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all placeholder:text-gray-400"
                     />
                 </div>
 
-                <nav className="space-y-1 relative" ref={sidebarRef}>
-                    {/* Applying Liquid Glass Effect to Sidebar too if needed, but per request usually for main menu */}
+                <nav className="space-y-1">
                     {CATEGORIES.map(cat => (
                         <button 
                             key={cat.id}
                             onClick={() => onTabChange(cat.id)}
-                            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-[15px] transition-all relative z-10 ${activeTab === cat.id ? 'sidebar-item-active shadow-sm' : 'text-gray-500 hover:bg-black/5'}`}
+                            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-[15px] transition-all ${activeTab === cat.id ? 'sidebar-item-active shadow-md' : 'text-gray-400 hover:bg-white/5 hover:text-white'}`}
                         >
-                            <span className={activeTab === cat.id ? 'text-blue-500' : 'text-gray-400'}>{cat.icon}</span>
+                            <span className={activeTab === cat.id ? 'text-blue-500' : 'text-gray-500'}>{cat.icon}</span>
                             {cat.title}
                         </button>
                     ))}
                 </nav>
+
+                <div className="mt-10 pt-6 border-t border-white/10">
+                    <h3 className="px-4 text-[13px] font-bold text-gray-500 uppercase tracking-wider mb-4">หมวดหมู่</h3>
+                    <div className="space-y-1">
+                        {['ความบันเทิง', 'เพิ่มประสิทธิภาพ', 'รูปและวิดีโอ', 'เด็ก'].map(name => (
+                            <button key={name} className="w-full text-left px-4 py-2.5 rounded-xl text-[14px] text-gray-400 font-medium hover:bg-white/5 hover:text-white transition-all">
+                                {name}
+                            </button>
+                        ))}
+                    </div>
+                </div>
             </div>
         );
     };
@@ -381,10 +420,10 @@
                     <p className="text-sm text-gray-500 truncate mb-1">{app.subtitle}</p>
                     <div className="flex items-center text-xs text-yellow-500 font-bold">
                         <svg className="w-3 h-3 fill-current mr-1" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        4.8 <span className="text-gray-400 font-medium ml-1">ดาวน์โหลดแล้ว 1M+</span>
+                        4.8 <span className="text-gray-400 font-medium ml-1">นิยม</span>
                     </div>
                 </div>
-                <button className="bg-black/5 text-blue-600 font-bold px-6 py-2 rounded-full text-sm hover:bg-black/10 transition-colors uppercase">
+                <button className="lg-btn">
                     GET
                 </button>
             </div>
@@ -431,13 +470,14 @@
                       
                       <button 
                         onClick={() => window.open(app?.url, '_blank')}
-                        className="w-full bg-blue-500 text-white font-bold py-4 rounded-full shadow-lg shadow-blue-200 hover:scale-105 active:scale-95 transition-all mb-4"
+                        className="lg-btn w-full py-6 text-xl mb-4"
+                        style={{ padding: '1.5rem 2rem' }}
                       >
                         OPEN IN APP STORE
                       </button>
                       <button 
                         onClick={() => window.location.href = window.location.pathname}
-                        className="text-gray-400 font-bold hover:text-gray-900 transition-colors"
+                        className="text-gray-400 font-bold hover:text-gray-900 transition-colors mt-4"
                       >
                         กลับสู่ร้านค้า
                       </button>
@@ -466,8 +506,8 @@
                             {searchTerm ? 'ผลการค้นหา' : (CATEGORIES.find(c => c.id === activeTab)?.title)}
                         </h1>
                     </div>
-                    <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-md cursor-pointer hover:scale-110 transition-transform">
-                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" className="bg-blue-100" />
+                    <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-md cursor-pointer hover:scale-110 transition-transform bg-gray-200">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" />
                     </div>
                 </header>
 
@@ -484,29 +524,29 @@
                                             <img src="https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/4a/04/00/4a040082-9092-23c5-6804-06927d118933/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/128x128bb.png" className="w-12 h-12 app-icon" />
                                             <div className="flex-grow min-w-0">
                                                 <h4 className="font-bold text-sm truncate">Duolingo</h4>
-                                                <p className="text-xs text-white/70 truncate">แอปเรียนภาษาที่สนุกที่สุด</p>
+                                                <p className="text-xs text-white/70 truncate">เรียนภาษาได้ทุกที่</p>
                                             </div>
-                                            <button className="bg-white text-black font-bold px-5 py-1.5 rounded-full text-xs">ดู</button>
+                                            <button className="lg-btn bg-white/20 text-white">ดู</button>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="relative h-[480px] rounded-[32px] overflow-hidden group app-card-shadow cursor-pointer">
                                     <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1000" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                                     <div className="absolute inset-0 bg-gradient-to-t from-blue-900/80 via-transparent to-transparent flex flex-col justify-end p-8 text-white">
-                                        <span className="text-[13px] font-bold uppercase tracking-widest text-white/70 mb-2">New Arrival</span>
-                                        <h2 className="text-4xl font-extrabold leading-tight mb-4">รวมแอป AI<br/>ที่สุดของความล้ำ</h2>
+                                        <span className="text-[13px] font-bold uppercase tracking-widest text-white/70 mb-2">Featured</span>
+                                        <h2 className="text-4xl font-extrabold leading-tight mb-4">รวมแอป AI<br/>ก้าวล้ำไปกับคุณ</h2>
                                         <div className="flex items-center gap-4 glass-panel p-4 rounded-3xl bg-white/10">
                                             <img src="https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/18/d8/67/18d867c2-9e2c-47d0-1498-5c493c403330/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/128x128bb.png" className="w-12 h-12 app-icon" />
                                             <div className="flex-grow min-w-0">
                                                 <h4 className="font-bold text-sm truncate">ChatGPT</h4>
-                                                <p className="text-xs text-white/70 truncate">Interact with AI instantly</p>
+                                                <p className="text-xs text-white/70 truncate">The future of chat</p>
                                             </div>
-                                            <button className="bg-white text-black font-bold px-5 py-1.5 rounded-full text-xs">เปิด</button>
+                                            <button className="lg-btn bg-white/20 text-white">เปิด</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <h2 className="text-2xl font-extrabold mb-6 px-2">แอปยอดนิยมแนะนำ</h2>
+                            <h2 className="text-2xl font-extrabold mb-6 px-2">แอปยอดนิยม</h2>
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-2">
                                 {CATEGORIES.flatMap(c => c.apps).slice(0, 6).map(app => (
                                     <AppListItem key={app.id} app={app} />
@@ -521,7 +561,7 @@
                                 ))
                             ) : (
                                 <div className="col-span-full py-20 text-center glass-panel rounded-3xl">
-                                    <p className="text-gray-400 text-lg">ไม่พบแอปที่คุณค้นหา</p>
+                                    <p className="text-gray-400 text-lg">ไม่พบสิ่งที่คุณค้นหา</p>
                                 </div>
                             )}
                         </div>
@@ -529,29 +569,24 @@
                 </div>
 
                 <footer className="mt-20 py-10 text-center text-gray-400 text-[13px] font-medium border-t border-black/5">
-                    <p>© {new Date().getFullYear()} PKC Store. Experience Liquid Glass UI</p>
-                    <p className="mt-1">เปิดใน Safari บน iOS เพื่อดู Smart Banner ด้านบน</p>
+                    <p>© {new Date().getFullYear()} PKC Store. Premium Liquid Glass Storefront.</p>
                 </footer>
             </div>
           </main>
 
-          {/* Mobile Navigation Bar with Liquid Glass Shader Effect */}
           <nav 
             ref={mobileNavRef}
-            className="mobile-nav fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-md h-20 px-4 items-center justify-around z-50 rounded-full glass-panel overflow-hidden border border-white/40 shadow-2xl"
+            className="mobile-nav fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-md h-20 px-4 items-center justify-around z-50 rounded-full glass-panel overflow-hidden border border-white/40 shadow-2xl bg-white/30"
           >
-                {/* WebGL Shader Layer */}
                 <LiquidGlassBackground containerRef={mobileNavRef} />
-                
-                {/* Icons Layer */}
                 {CATEGORIES.map(cat => (
                     <button 
                         key={cat.id}
                         onClick={() => { setActiveTab(cat.id); setSearchTerm(''); }}
-                        className={`relative z-10 flex flex-col items-center gap-1 transition-all ${activeTab === cat.id ? 'text-blue-500 scale-110 font-bold' : 'text-gray-400 opacity-80'}`}
+                        className={`relative z-10 flex flex-col items-center gap-1 transition-all ${activeTab === cat.id ? 'text-blue-600 scale-110 font-bold' : 'text-gray-500 opacity-70'}`}
                     >
                         <span className="scale-75">{cat.icon}</span>
-                        <span className="text-[10px] uppercase tracking-tighter">{cat.title}</span>
+                        <span className="text-[10px] uppercase font-bold tracking-tighter">{cat.title}</span>
                     </button>
                 ))}
           </nav>
