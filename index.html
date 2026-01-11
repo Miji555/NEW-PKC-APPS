@@ -53,33 +53,36 @@
         filter: blur(80px);
     }
 
-    /* Liquid Glass Button Design */
     .lg-btn {
         position: relative;
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(0, 122, 255, 0.1);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: none; 
         color: #007AFF;
         font-weight: 700;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        filter: url(#filter); /* Apply the organic displacement filter */
-        padding: 6px 20px;
-        border-radius: 999px;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        transition: all 0.2s ease;
+        padding: 8px 20px;
+        border-radius: 20px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
     }
 
-    .lg-btn:active {
-        transform: scale(0.92);
-        background: rgba(0, 0, 0, 0.05);
+    .lg-btn:hover {
+        background: rgba(0, 122, 255, 0.15);
     }
 
-    /* Dark Mode Sidebar */
+    .lg-btn:active {
+        transform: scale(0.95);
+        background: rgba(0, 122, 255, 0.2);
+    }
+
     .glass-sidebar {
-        background: rgba(28, 28, 30, 0.95); /* iOS System Gray 6 (Dark) */
+        background: rgba(28, 28, 30, 0.95); 
         backdrop-filter: blur(40px) saturate(180%);
         -webkit-backdrop-filter: blur(40px) saturate(180%);
         border-right: 1px solid rgba(255, 255, 255, 0.1);
@@ -88,7 +91,7 @@
 
     .sidebar-item-active {
         background: rgba(255, 255, 255, 0.1);
-        color: #0A84FF; /* iOS Blue (Dark) */
+        color: #0A84FF;
     }
 
     .glass-panel {
@@ -148,14 +151,6 @@
 <body>
   <div class="liquid-bg"></div>
   <div id="root"></div>
-
-  <!-- SVG Filter for Liquid Glass Buttons -->
-  <svg style="display: none">
-    <filter id="filter" color-interpolation-filters="linearRGB" filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse">
-      <feDisplacementMap in="SourceGraphic" in2="SourceGraphic" scale="12" xChannelSelector="R" yChannelSelector="B" x="0%" y="0%" width="100%" height="100%" result="displacementMap" />
-      <feGaussianBlur stdDeviation="1.5" x="0%" y="0%" width="100%" height="100%" in="displacementMap" edgeMode="none" result="blur" />
-    </filter>
-  </svg>
 
   <script type="text/babel" data-type="module">
     import React, { useState, useMemo, useEffect, useRef } from 'react';
@@ -217,6 +212,17 @@
             </svg>
         ),
         apps: []
+      },
+      {
+        id: 'search',
+        title: 'ค้นหา',
+        icon: (
+            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+        ),
+        apps: []
       }
     ];
 
@@ -225,7 +231,6 @@
       return match ? match[1] : null;
     };
 
-    // --- WebGL Shader Component for Liquid Glass Menu ---
     const LiquidGlassBackground = ({ containerRef }) => {
         const canvasRef = useRef(null);
 
@@ -256,7 +261,7 @@
                     const float MASK_MULTIPLIER_2 = 95.0;
                     const float MASK_STRENGTH_1 = 8.0;
                     const float MASK_STRENGTH_2 = 16.0;
-                    const float LIGHTING_INTENSITY = 0.2;
+                    const float LIGHTING_INTENSITY = 0.25;
 
                     vec2 fragCoord = gl_FragCoord.xy;
                     vec2 uv = fragCoord / iResolution.xy;
@@ -281,7 +286,7 @@
                     float gradient = clamp((m2.y + 0.1) / NUM_TWO, NUM_ZERO, NUM_ONE);
                     vec3 lighting = (baseColor * rb1 * gradient) + (vec3(1.0) * rb2 * LIGHTING_INTENSITY);
                     
-                    gl_FragColor = vec4(lighting, transition * 0.45);
+                    gl_FragColor = vec4(lighting, transition * 0.5);
                 }
             `;
 
@@ -365,7 +370,7 @@
                     <h1 className="text-xl font-extrabold tracking-tight">App Store</h1>
                 </div>
 
-                <div className="mb-8 relative">
+                <div className="mb-8 relative" onClick={() => onTabChange('search')}>
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
                     </div>
@@ -373,7 +378,7 @@
                         type="text" 
                         placeholder="ค้นหา" 
                         value={searchTerm}
-                        onChange={(e) => onSearchChange(e.target.value)}
+                        onChange={(e) => { onSearchChange(e.target.value); onTabChange('search'); }}
                         className="w-full bg-white/10 rounded-xl py-2.5 pl-9 pr-4 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all placeholder:text-gray-400"
                     />
                 </div>
@@ -435,6 +440,7 @@
       const [searchTerm, setSearchTerm] = useState('');
       const [currentAppId, setCurrentAppId] = useState(null);
       const mobileNavRef = useRef(null);
+      const searchInputRef = useRef(null);
 
       useEffect(() => {
         const checkParams = () => {
@@ -446,9 +452,15 @@
         return () => window.removeEventListener('popstate', checkParams);
       }, []);
 
+      useEffect(() => {
+          if (activeTab === 'search' && searchInputRef.current) {
+              searchInputRef.current.focus();
+          }
+      }, [activeTab]);
+
       const filteredApps = useMemo(() => {
           const allApps = CATEGORIES.flatMap(c => c.apps);
-          if (searchTerm) {
+          if (searchTerm || activeTab === 'search') {
               return allApps.filter(app => 
                   app.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
                   app.subtitle.toLowerCase().includes(searchTerm.toLowerCase())
@@ -471,7 +483,7 @@
                       <button 
                         onClick={() => window.open(app?.url, '_blank')}
                         className="lg-btn w-full py-6 text-xl mb-4"
-                        style={{ padding: '1.5rem 2rem' }}
+                        style={{ padding: '1.5rem 2rem', borderRadius: '30px' }}
                       >
                         OPEN IN APP STORE
                       </button>
@@ -503,7 +515,7 @@
                             {new Date().toLocaleDateString('th-TH', { weekday: 'long', day: 'numeric', month: 'long' })}
                         </p>
                         <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">
-                            {searchTerm ? 'ผลการค้นหา' : (CATEGORIES.find(c => c.id === activeTab)?.title)}
+                            {activeTab === 'search' ? 'ค้นหา' : (CATEGORIES.find(c => c.id === activeTab)?.title)}
                         </h1>
                     </div>
                     <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-md cursor-pointer hover:scale-110 transition-transform bg-gray-200">
@@ -512,6 +524,24 @@
                 </header>
 
                 <div className="animate-in">
+                    {activeTab === 'search' && (
+                        <div className="mb-10 px-2 lg:hidden">
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                                </div>
+                                <input 
+                                    ref={searchInputRef}
+                                    type="text" 
+                                    placeholder="ค้นหาแอปและเกม" 
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="w-full bg-black/5 rounded-2xl py-4 pl-12 pr-4 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all border border-black/5"
+                                />
+                            </div>
+                        </div>
+                    )}
+
                     {activeTab === 'today' && !searchTerm ? (
                         <>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
@@ -562,6 +592,19 @@
                             ) : (
                                 <div className="col-span-full py-20 text-center glass-panel rounded-3xl">
                                     <p className="text-gray-400 text-lg">ไม่พบสิ่งที่คุณค้นหา</p>
+                                    {activeTab === 'search' && !searchTerm && (
+                                        <div className="mt-4 flex flex-wrap justify-center gap-2 px-10">
+                                            {['RoV', 'Minecraft', 'TikTok', 'ChatGPT'].map(tag => (
+                                                <button 
+                                                    key={tag} 
+                                                    onClick={() => setSearchTerm(tag)}
+                                                    className="bg-black/5 hover:bg-black/10 px-4 py-2 rounded-full text-blue-500 font-bold transition-colors"
+                                                >
+                                                    {tag}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>
@@ -569,20 +612,20 @@
                 </div>
 
                 <footer className="mt-20 py-10 text-center text-gray-400 text-[13px] font-medium border-t border-black/5">
-                    <p>© {new Date().getFullYear()} PKC Store. Premium Liquid Glass Storefront.</p>
+                    <p>© {new Date().getFullYear()} PKC Store. Premium Storefront.</p>
                 </footer>
             </div>
           </main>
 
           <nav 
             ref={mobileNavRef}
-            className="mobile-nav fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-md h-20 px-4 items-center justify-around z-50 rounded-full glass-panel overflow-hidden border border-white/40 shadow-2xl bg-white/30"
+            className="mobile-nav fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-md h-20 px-2 items-center justify-around z-50 rounded-full glass-panel overflow-hidden border border-white/40 shadow-2xl bg-white/30"
           >
                 <LiquidGlassBackground containerRef={mobileNavRef} />
                 {CATEGORIES.map(cat => (
                     <button 
                         key={cat.id}
-                        onClick={() => { setActiveTab(cat.id); setSearchTerm(''); }}
+                        onClick={() => { setActiveTab(cat.id); if(cat.id !== 'search') setSearchTerm(''); }}
                         className={`relative z-10 flex flex-col items-center gap-1 transition-all ${activeTab === cat.id ? 'text-blue-600 scale-110 font-bold' : 'text-gray-500 opacity-70'}`}
                     >
                         <span className="scale-75">{cat.icon}</span>
